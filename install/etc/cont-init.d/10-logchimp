@@ -1,0 +1,26 @@
+#!/usr/bin/with-contenv bash
+
+source /assets/functions/00-container
+prepare_service
+PROCESS_NAME="logchimp"
+
+sanity_db postgres
+db_ready postgres
+
+## Write Configuration
+
+echo "{
+	\"database\": {
+    \"host\": \"$DB_HOST\",
+    \"user\": \"$DB_USER\",
+    \"password\": \"$DB_PASS\",
+    \"name\": \"$DB_NAME\",
+    \"port\": $DB_PORT,
+    \"ssl\": false
+  },
+  \"server\": {
+    \"secretKey\": \"$APP_KEY\"
+  }
+}" > /app/logchimp.config.json
+
+liftoff

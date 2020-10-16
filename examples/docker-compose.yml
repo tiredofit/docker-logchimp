@@ -1,0 +1,86 @@
+version: '3.7'
+services:
+
+  logchimp-app:
+    image: tiredofit/logchimp:latest
+    container_name: logchimp-app
+    depends_on:
+      - logchimp-db
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.logchimp.rule=Host(`logchimp.example.com`)
+      - traefik.http.services.logchimp.loadbalancer.server.port=8080
+    volumes:
+      - ./logs:/www/logs
+    environment:
+      - ZABBIX_HOSTNAME=logchimp-app
+
+      - TIMEZONE=America/Vancouver
+      - DEBUG_MODE=FALSE
+      - CONTAINER_LOG_LEVEL=INFO
+
+      - APP_KEY=secret
+
+      - BACKEND_HOSTNAME=localhost
+      - BACKEND_PROTOCOL=http
+      - BACKEND_PORT=3000
+
+      - DB_HOST=logchimp-db
+      - DB_PORT=5432
+      - DB_USER=logchimp
+      - DB_PASS=logchimp
+      - DB_NAME=logchimp
+
+      - FRONTEND_PORT=8080
+
+    networks:
+      - proxy
+      - services
+    restart: always
+
+  logchimp-db:
+    container_name: logchimp-db
+    image: tiredofit/postgres:latest
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      - TIMEZONE=America/Vancouver
+      - ZABBIX_HOSTNAME=logchimp-db
+
+      - POSTGRES_DB=logchimp
+      - POSTGRES_USER=logchimp
+      - POSTGRES_PASSWORD=logchimp
+    networks:
+      - services
+    restart: always
+
+  logchimp-db-backup:
+    container_name: logchimp-db-backup
+    image: tiredofit/db-backup
+    links:
+      - logchimp-db
+    volumes:
+      - ./dbbackup:/backup
+    environment:
+      - TIMEZONE=America/Vancouver
+      - ZABBIX_HOSTNAME=logchimp-db-backup
+      - DB_HOST=logchimp-db
+      - DB_TYPE=postgres
+      - DB_NAME=logchimp
+      - DB_USER=logchimp
+      - DB_PASS=logchimp
+      - DB_DUMP_FREQ=1440
+      - DB_DUMP_BEGIN=0000
+      - DB_CLEANUP_TIME=8640
+      - COMPRESSION=BZ
+      - MD5=TRUE
+    networks:
+      - services
+    restart: always
+
+networks:
+  proxy:
+    external: true
+  services:
+    external: true
+

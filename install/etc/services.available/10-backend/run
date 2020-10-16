@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv bash
+
+source /assets/functions/00-container
+source /assets/defaults/10-logchimp
+PROCESS_NAME="logchimp-backend"
+
+check_container_initialized
+check_service_initialized init 10-logchimp
+
+liftoff
+
+print_info "Starting Logchimp backend"
+cd /app
+yarn run server:dev
