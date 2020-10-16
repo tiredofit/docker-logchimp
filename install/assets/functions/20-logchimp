@@ -1,0 +1,29 @@
+#!/usr/bin/with-contenv bash
+
+configure_frontend() {
+    rm -rf ${NGINX_WEBROOT}
+    ln -sf /app/server/public ${NGINX_WEBROOT}
+}
+
+configure_backend() {
+    print_debug "Configuring Nginx Backend"
+    sed -i "s|<BACKEND_PROTOCOL>|${BACKEND_PROTOCOL}|g" /etc/nginx/conf.d/default.conf
+    sed -i "s|<BACKEND_HOSTNAME>|${BACKEND_HOSTNAME}|g" /etc/nginx/conf.d/default.conf
+    sed -i "s|<BACKEND_PORT>|${BACKEND_PORT}|g" /etc/nginx/conf.d/default.conf
+}
+
+generate_configuration() {
+    echo "{
+        \"database\": {
+        \"host\": \"$DB_HOST\",
+        \"user\": \"$DB_USER\",
+        \"password\": \"$DB_PASS\",
+        \"name\": \"$DB_NAME\",
+        \"port\": $DB_PORT,
+        \"ssl\": false
+    },
+    \"server\": {
+        \"secretKey\": \"$APP_KEY\"
+    }
+    }" > /app/logchimp.config.json
+}

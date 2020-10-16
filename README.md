@@ -62,6 +62,7 @@ docker pull tiredofit/logchimp
 * Map [persistent storage](#data-volumes) for access to configuration and data files for backup.
 * Make [networking ports](#networking) available for public access if necessary
 
+In reality all you wil need to do is populate the `APP_KEY` and `DB_*` environment variables to have a working solution.
 
 ## Configuration
 
@@ -74,27 +75,28 @@ The following directories are used for configuration and can be mapped for persi
 
 ### Environment Variables
 
-Along with the Environment Variables from the [Base image](https://hub.docker.com/r/tiredofit/alpine)  below is the complete list of available options that can be used to customize your installation.
+Along with the Environment Variables from the [Base image](https://hub.docker.com/r/tiredofit/alpine) and [Web Image](https://hub.docker.com/r/tiredofit/nginx) below is the complete list of available options that can be used to customize your installation.
 
-| Parameter          | Description                                                    | Default      |
-| ------------------ | -------------------------------------------------------------- | ------------ |
-| `BACKEND_HOSTNAME` | Backend Hostname                                               | `localhost`  |
-| `BACKEND_PORT`     | Backend Port                                                   | `3000`       |
-| `BACKEND_PROTOCOL` | Backend protocol `http` or `https`                             | `http`       |
-| `DB_HOST`          | Host or container name of Postgresql Server e.g. `logchimp-db` |              |
-| `DB_NAME`          | Postgresql Database name e.g. `logchimp`                       |              |
-| `DB_PASS`          | Postgresql Password for above Database e.g. `password`         |              |
-| `DB_PORT`          | Postgresql Server Port - Default `5432`                        | `5432`       |
-| `DB_USER`          | Postgresql Username for above Database e.g. `logchimp`         |              |
-| `FRONTEND_PORT`    | Frontend Port                                                  | `8080`       |
+| Parameter          | Description                                                          | Default     |
+| ------------------ | -------------------------------------------------------------------- | ----------- |
+| `APP_KEY`          | Used for encryption/decryption of passwords. Do not change once set! |             |
+| `BACKEND_HOSTNAME` | Backend Hostname                                                     | `localhost` |
+| `BACKEND_PORT`     | Backend Port                                                         | `3000`      |
+| `BACKEND_PROTOCOL` | Backend protocol `http` or `https`                                   | `http`      |
+| `DB_HOST`          | Host or container name of Postgresql Server e.g. `logchimp-db`       |             |
+| `DB_NAME`          | Postgresql Database name e.g. `logchimp`                             |             |
+| `DB_PASS`          | Postgresql Password for above Database e.g. `password`               |             |
+| `DB_PORT`          | Postgresql Server Port - Default `5432`                              | `5432`      |
+| `DB_USER`          | Postgresql Username for above Database e.g. `logchimp`               |             |
+| `FRONTEND_PORT`    | Frontend Port                                                        | `8080`      |
 
 ### Networking
 
 The following ports are exposed.
 
-| Port   | Description |
-| ------ | ----------- |
-| `8080` | HTTP        |
+| Port | Description |
+| ---- | ----------- |
+| `80` | HTTP        |
 
 
 ## Maintenance

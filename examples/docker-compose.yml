@@ -8,8 +8,9 @@ services:
       - logchimp-db
     labels:
       - traefik.enable=true
-      - traefik.http.routers.logchimp.rule=Host(`logchimp.example.com`)
-      - traefik.http.services.logchimp.loadbalancer.server.port=8080
+      #- traefik.http.routers.logchimp.rule=Host(`logchimp.example.com`)
+      - traefik.http.routers.logchimp.rule=Host(`home.tiredofit.ca`)
+      - traefik.http.services.logchimp.loadbalancer.server.port=80
     volumes:
       - ./logs:/www/logs
     environment:

@@ -1,3 +1,10 @@
+## 0.1.0 2020-10-16 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add nginx for serving production assets
+      - Working release
+
+
 ## 0.0.1 2020-10-16 <dave at tiredofit dot ca>
 
    ### Added
